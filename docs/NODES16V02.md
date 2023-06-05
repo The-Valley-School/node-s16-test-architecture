@@ -1,10 +1,73 @@
-# VIDEO 04 - Desplegando Typescript en Render
+# VIDEO 02 - Test del POST a user
 
-En este vídeo hemos visto cómo podemos desplegar en Render:
+En este vídeo hemos realizado el primer test completo de nuestra API, en este caso hemos creado un test que valida el POST de usuarios:
 
-<https://render.com/>
+```tsx
+import { describe } from "node:test";
+import { mongoConnect } from "../src/databases/mongo-db";
+import mongoose from "mongoose";
+import { app, server } from "../src/index";
+import { type IUser } from "../src/models/mongo/User";
+import request from "supertest";
 
-Para ello, vamos a modificar nuestro index.ts para que no sea una función asíncrona:
+describe("User controller", () => {
+  const userMock: IUser = {
+    email: "fran@mail.com",
+    password: "12345678",
+    firstName: "Fran",
+    lastName: "Linde",
+    phone: "666555444",
+    address: {
+      street: "Calle Falsa",
+      number: 123,
+      city: "Madrid",
+    },
+  };
+
+  beforeAll(async () => {
+    await mongoConnect();
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+    server.close();
+  });
+
+  it("Simple test to check jest in working", () => {
+    expect(true).toBeTruthy();
+  });
+
+  it("Simple test to check jest in working", () => {
+    const miTexto = "Hola chicos";
+    expect(miTexto.length).toBe(11);
+  });
+
+  it("POST /user - this should create an user", async() => {
+    const response = await request(app)
+      .post("/user")
+      .send(userMock)
+      .set("Accept", "application/json")
+      .expect(201);
+
+    expect(response.body).toHaveProperty("_id");
+    expect(response.body.email).toBe(userMock.email);
+  })
+});
+```
+
+Para no tener problemas a la hora de lanzar los test hemos modificado el jest.config.js para que solo ejecute los test que se encuentran en la carpeta __tests__ 
+
+```tsx
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  testMatch: [
+    "**/__tests__/**/*.ts"
+  ]
+};
+```
+
+Y ha sido necesario exportar desde app el server y la app:
 
 ```tsx
 import { userRouter } from "./routes/user.routes";
@@ -30,7 +93,7 @@ import swaggerUiExpress from "swagger-ui-express";
 
 // Configuración del server
 const PORT = 3000;
-const app = express();
+export const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -104,31 +167,8 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
   }
 });
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Server levantado en el puerto ${PORT}`);
 });
-
-// Algunos productos como vercel necesitan que exportemos el servidor
-module.exports = app;
 ```
-
-Tras esto debemos crear un nuevo despliegue de “Web Service” en render indicando esta config:
-
-Comando de build:
-
-```tsx
-npm i && npm run build
-```
-
-Comando de start:
-
-```tsx
-node ./dist/index.js
-```
-
-Y no debemos olvidarnos de añadir nuestras variables de entorno.
-
-Una vez hagamos eso, tendremos nuestra API desplegada incluso con la documentación de Swagger:
-
-![Untitled](/docs/assets/Untitled.png)
 
