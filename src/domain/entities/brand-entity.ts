@@ -42,7 +42,7 @@ const Schema = mongoose.Schema;
 const allowedCountries: string[] = ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"];
 const currentYear: number = new Date().getFullYear();
 
-interface IBrand {
+export interface IBrand {
   name: string;
   creationYear: number;
   country: string;

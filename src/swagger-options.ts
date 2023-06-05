@@ -24,7 +24,6 @@ export const swaggerOptions: SwaggerOptions = {
     ]
   },
   apis: [
-    "./src/models/*/*.ts",
-    "./src/routes/*.ts",
+    "./src/**/*.ts",
   ]
 };

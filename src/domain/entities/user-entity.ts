@@ -1,7 +1,8 @@
-import { type ICar } from "./Car";
+
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { ICar } from "./car-entity";
 const Schema = mongoose.Schema;
 
 export interface IUser {
