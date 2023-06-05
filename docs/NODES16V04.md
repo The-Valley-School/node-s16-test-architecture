@@ -6,7 +6,7 @@ En el centro de la arquitectura hexagonal, está la lógica de negocio. Las tecn
 
 Las adaptaciones son las implementaciones de estos puertos que interactúan con la tecnología específica, como una base de datos, una interfaz de usuario o un servicio externo.
 
-![hexagonal-architecture-diagram.png](/assets/hexagonal-architecture-diagram.png)
+![hexagonal-architecture-diagram.png](/docs/assets/hexagonal-architecture-diagram.png)
 
 Este sería un ejemplo de cómo se puede aplicar la arquitectura hexagonal en el desarrollo de una API con Node.js, Express, Mongoose y TypeScript.
 
