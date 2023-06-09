@@ -20,7 +20,7 @@
     "mongo",
     "express"
   ],
-  "author": "Fran Linde",
+  "author": "Fran Linde Blazquez",
   "license": "ISC",
   "dependencies": {
     "@types/swagger-jsdoc": "^6.0.1",
